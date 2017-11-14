@@ -12,7 +12,7 @@ void onMessage(const StompMessage &s)
 	myClient->Ack(s);
 }
 
-void actualFunctionToBeCalled()
+void onConnect()
 {
 	myClient->Subscribe("/queue/agent", onMessage, QTWebStompClient::ClientIndividual);
 }
@@ -20,8 +20,7 @@ void actualFunctionToBeCalled()
 int main(int argc, char *argv[])
 {
 	QCoreApplication a(argc, argv);
-	myClient = new QTWebStompClient("ws://10.12.4.142:15674/ws", "ugs", "ugs", actualFunctionToBeCalled, true);
-	
+	myClient = new QTWebStompClient("ws://10.12.4.142:15674/ws", "ugs", "ugs", onConnect, false);
 	return a.exec();
 }
 

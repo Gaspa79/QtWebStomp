@@ -79,8 +79,9 @@ vector<string> StompMessage::messageToVector(const string& str, const string& de
 
 ////////////////////////////////////////////
 
-QTWebStompClient::QTWebStompClient(const QUrl &url, const char* login, const char* passcode, void(*onConnected)(void), bool debug, QObject *parent)
+QTWebStompClient::QTWebStompClient(const char* url, const char* login, const char* passcode, void(*onConnected)(void), bool debug, QObject *parent)
 {
+	QUrl myUrl(QString(url));
 	m_debug = debug;
 	m_login = login;
 	m_passcode = passcode;

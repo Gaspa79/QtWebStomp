@@ -18,7 +18,7 @@ class QTWEBSTOMPCLIENTDLL_EXPORT QTWebStompClient : public QObject
 {
 
 public:
-	explicit QTWebStompClient(const QUrl &url, const char* login, const char* passcode, void(*onConnectedCallback)(void), bool debug = false, QObject *parent = Q_NULLPTR);
+	explicit QTWebStompClient(const char* url, const char* login, const char* passcode, void(*onConnectedCallback)(void), bool debug = false, QObject *parent = Q_NULLPTR);
 	enum ConnectionState { Connecting, Connected, Subscribed, Closed };
 	enum AckMode { Auto, Client, ClientIndividual};
 	void Subscribe(const char* queueName, void(*onMessageCallback)(const StompMessage &s), AckMode ackMode = Auto);
