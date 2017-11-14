@@ -50,6 +50,14 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>qtmaind.lib;Qt5Cored.lib;Qt5WebSocketsd.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <PostBuildEvent>
+      <Command>mkdir build\bin
+mkdir build\include
+copy x64\Debug\QTWebStompClientDll.dll build\bin\QTWebStompClientDll.dll
+copy x64\Debug\QTWebStompClientDll.lib build\bin\QTWebStompClientDll.lib
+copy QTWebStompClientDll.h build\include\QTWebStompClientDll.h
+copy StompMessage.cpp build\include\StompMessage.cpp</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
