@@ -81,7 +81,6 @@ copy StompMessage.h build\include\StompMessage.h</Command>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="QTWebStompClientDll.h" />
-    <ClInclude Include="qtwebstompclientdll_global.h" />
   </ItemGroup>
   <ItemGroup>
   </ItemGroup>
