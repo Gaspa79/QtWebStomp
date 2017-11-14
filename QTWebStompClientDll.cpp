@@ -155,8 +155,8 @@ void QTWebStompClient::onTextMessageReceived(QString message)
 
 				qDebug() << "Message received from queue!" << endl << stompMessage.toString().c_str();
 				// decode the message and print it on the screen, later this will just return it.
-				m_onMessageCallback(stompMessage);
 			}
+			m_onMessageCallback(stompMessage);
 		}
 		else
 		{
@@ -219,6 +219,7 @@ void QTWebStompClient::closed()
 void QTWebStompClient::Ack(const StompMessage & s)
 {
 	auto ack = s.m_headers.at(std::string("ack"));
+	Ack(ack.c_str());
 }
 
 void QTWebStompClient::Ack(const char* id)
