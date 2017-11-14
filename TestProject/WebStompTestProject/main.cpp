@@ -20,8 +20,7 @@ void actualFunctionToBeCalled()
 int main(int argc, char *argv[])
 {
 	QCoreApplication a(argc, argv);
-	QUrl myUrl(QStringLiteral("ws://10.12.4.142:15674/ws"));
-	myClient = new QTWebStompClient(myUrl, "ugs", "ugs", actualFunctionToBeCalled, true);
+	myClient = new QTWebStompClient("ws://10.12.4.142:15674/ws", "ugs", "ugs", actualFunctionToBeCalled, true);
 	
 	return a.exec();
 }
