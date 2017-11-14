@@ -1,5 +1,6 @@
 #include <QtCore/QCoreApplication>
 #include "QTWebStompClientDll.h"
+#include "StompMessage.h"
 
 QTWebStompClient* myClient;
 

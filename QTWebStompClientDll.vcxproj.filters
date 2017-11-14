@@ -29,8 +29,8 @@
     <ClCompile Include="QTWebStompClientDll.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="StompMessage.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="StompMessage.h">
+      <Filter>Header Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

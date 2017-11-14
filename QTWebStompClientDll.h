@@ -1,8 +1,8 @@
 #pragma once
 #include "qtwebstompclientdll_global.h"
+#include "StompMessage.h"
 #include <QtCore/QObject>
 #include <QtWebSockets/QWebSocket>
-#include "StompMessage.cpp"
 
 class QTWEBSTOMPCLIENTDLL_EXPORT QTWebStompClient : public QObject
 {
