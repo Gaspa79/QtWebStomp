@@ -174,7 +174,6 @@ void QTWebStompClient::onTextMessageReceived(QString message)
 
 }
 
-// TODO: Change to ack client-individual
 // TODO: Change to have multiple ids (so we can handle more than one subscription)
 void QTWebStompClient::Subscribe(const char* queueName, void(*onMessageCallback)(const StompMessage &s), QTWebStompClient::AckMode ackMode)
 {
@@ -228,4 +227,26 @@ void QTWebStompClient::Ack(const char* id)
 	ackFrame.replace("{{TheAckId}}", id);
 	QString ackFrameNullFixed(ackFrame.data(), ackFrame.size() + 1); // solves the null-terminator issue
 	m_webSocket.sendTextMessage(ackFrameNullFixed);
+}
+
+void QTWebStompClient::Send(const StompMessage & stompMessage)
+{
+	std::string sendFrame = std::string(stompMessage.m_messageType+"\u000A");
+	for (auto &header : stompMessage.m_headers)
+	{
+		sendFrame += header.first + ":" + header.second + "\u000A";
+	}
+
+	sendFrame += "\u000A" + stompMessage.m_message + "\u0000";
+
+	QString sendFrameTemp(sendFrame.c_str());
+	QString sendFrameMessage(sendFrameTemp.data(), sendFrameTemp.size() + 1);
+	m_webSocket.sendTextMessage(sendFrameMessage);
+}
+
+void QTWebStompClient::Send(const char* destination, const char* message, map<std::string, std::string> &headers)
+{
+	headers[std::string("destination")] = std::string(destination);
+	StompMessage s ("SEND", headers, message);
+	Send(s);
 }
