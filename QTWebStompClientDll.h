@@ -81,6 +81,7 @@ private:
 	QWebSocket m_webSocket;
 	QUrl m_url;
 	bool m_debug;
+	bool m_SSL;
 	ConnectionState m_connectionState;
 	const char* m_login;
 	const char* m_passcode;

@@ -19,11 +19,12 @@ using namespace std;
 
 class QTWEBSTOMPCLIENTDLL_EXPORT StompMessage {
 public:
-	/// This creates a stompmessage from a message received string
+	/* This constructor is not meant for the user, just for the dll*/
 	StompMessage(const char* rawMessage);
 
 	StompMessage(string messageType, map<string, string> headers, const char* messageBody = "");
 	
+	/* Creates a string with the message in a readable format =)*/
 	std::string toString() const;
 
 	enum MessageType { CONNECT, SUBSCRIBE, SEND, MESSAGE };
