@@ -25,11 +25,12 @@ public:
 		url: The url of the webstomp server (example: ws://localhost/ws). The ws:// to indicate the protocol is required
 		login: Self-explanatory. The username you wanna use to log in
 		passcode: The password of the user. Why I didn't name it "password"? Well because in STOMP it's called passCODE.
+		vHost: The vHost you want to connect to. If you don't specify one, the server will try and connect you to the default one if you have access.
 		debug: Bool. Set to true to get qDebug messages to see what's going on.
 		parent: The parent of the QObject. I almost made you believe I know what this is!
 	* @author : dmaurino
 	*/
-	explicit QTWebStompClient(const char* url, const char* login, const char* passcode, void(*onConnectedCallback)(void), bool debug = false, QObject *parent = Q_NULLPTR);
+	explicit QTWebStompClient(const char* url, const char* login, const char* passcode, void(*onConnectedCallback)(void), const char* vHost = NULL, bool debug = false, QObject *parent = Q_NULLPTR);
 	enum ConnectionState { Connecting, Connected, Subscribed, Closed };
 	enum AckMode { Auto, Client, ClientIndividual};
 	void Subscribe(const char* queueName, void(*onMessageCallback)(const StompMessage &s), AckMode ackMode = Auto);
@@ -52,6 +53,7 @@ private:
 	ConnectionState m_connectionState;
 	const char* m_login;
 	const char* m_passcode;
+	const char* m_vHost;
 	void(*m_onConnectedCallback)(void);
 	void(*m_onMessageCallback)(const StompMessage &s);
 };

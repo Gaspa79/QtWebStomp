@@ -79,7 +79,7 @@ vector<string> StompMessage::messageToVector(const string& str, const string& de
 
 ////////////////////////////////////////////
 
-QTWebStompClient::QTWebStompClient(const char* url, const char* login, const char* passcode, void(*onConnected)(void), bool debug, QObject *parent)
+QTWebStompClient::QTWebStompClient(const char* url, const char* login, const char* passcode, void(*onConnected)(void), const char* vHost, bool debug, QObject *parent)
 {
 	QUrl myUrl(QString(url));
 	m_debug = debug;
@@ -89,6 +89,9 @@ QTWebStompClient::QTWebStompClient(const char* url, const char* login, const cha
 	if (m_debug) {
 		qDebug() << "Connecting to WebSocket server:" << url;
 	}
+	m_vHost = vHost;
+
+
 	connect(&m_webSocket, &QWebSocket::connected, this, &QTWebStompClient::onConnected);
 	connect(&m_webSocket, &QWebSocket::disconnected, this, &QTWebStompClient::closed);
 	m_webSocket.open(QUrl(url));
@@ -104,9 +107,16 @@ void QTWebStompClient::onConnected()
 		this, &QTWebStompClient::onTextMessageReceived);
 
 	m_connectionState = Connecting;
-	QString subscribeFrame = "CONNECT\u000Aaccept-version:1.2\u000Alogin:{Login}\u000Apasscode:{Passcode}\u000A\u000A\u0000";
+	QString subscribeFrame = "CONNECT\u000A{vHost}accept-version:1.2\u000Alogin:{Login}\u000Apasscode:{Passcode}\u000A\u000A\u0000";
 	subscribeFrame.replace("{Login}", m_login);
 	subscribeFrame.replace("{Passcode}", m_passcode);
+	QString vHost = "";
+	if (m_vHost) {
+		vHost = "vHost:" + QString(m_vHost) + QString("\u000A");
+	}
+
+	subscribeFrame.replace("{vHost}", vHost);
+
 	QString subscribeFrameMessage = QString(subscribeFrame.data(), subscribeFrame.size() + 1); // solves the null-terminator issue
 	m_webSocket.sendTextMessage(subscribeFrameMessage);
 

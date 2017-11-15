@@ -20,10 +20,8 @@ void onConnect()
 int main(int argc, char *argv[])
 {
 	QCoreApplication a(argc, argv);
-	myClient = new QTWebStompClient("ws://10.12.4.142:15674/ws", "ugs", "ugs", onConnect, false);
+	myClient = new QTWebStompClient("ws://10.12.4.142:15674/ws", "ugs", "ugs", onConnect, "", false);
 	return a.exec();
-
-	QTWebStompClient* myClient99 = new QTWebStompClient()
 }
 
 
