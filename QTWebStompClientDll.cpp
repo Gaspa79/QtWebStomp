@@ -140,6 +140,7 @@ void QTWebStompClient::onTextMessageReceived(QString message)
 			if (this->m_onConnectedCallback == NULL)
 			{
 				qDebug() << "WARNING: No callback selected for connection";
+				throw runtime_error("No onConnect callback set!");
 			}
 			else
 			{
@@ -152,7 +153,8 @@ void QTWebStompClient::onTextMessageReceived(QString message)
 			{
 				qDebug() << "Message type CONNECTED expected, got " << stompMessage.m_messageType.c_str();
 			}
-			// TODO: Throw exception
+
+			throw runtime_error("Message type CONNECTED expected, got" + stompMessage.toString());
 		}
 		break;
 
@@ -174,7 +176,8 @@ void QTWebStompClient::onTextMessageReceived(QString message)
 			{
 				qDebug() << "Message type MESSAGE expected, got " << stompMessage.toString().c_str();
 			}
-			// TODO: Throw exception
+			
+			throw runtime_error("Message type MESSAGE expected, got" + stompMessage.m_messageType + ". Message is : " +stompMessage.toString());
 		}
 		break;
 
@@ -189,9 +192,8 @@ void QTWebStompClient::Subscribe(const char* queueName, void(*onMessageCallback)
 {
 	if (m_connectionState != Connected)
 	{
-		//TODO: excception
 		qDebug() << "Subscribe without connection?";
-		throw new exception("Cannot subscribe when connection hasn't finished. Try using the callback function for onConnect to subscribe");
+		throw runtime_error("Cannot subscribe when connection hasn't finished. Try using the callback function for onConnect to subscribe");
 	}
 	map<string, string> headers;
 	headers["id"] = "0";
@@ -223,6 +225,7 @@ void QTWebStompClient::Subscribe(const char* queueName, void(*onMessageCallback)
 void QTWebStompClient::closed()
 {
 	qDebug() << "Connection closed =(";
+	throw runtime_error("Underlying connection unexpectedly closed =(");
 }
 
 void QTWebStompClient::Ack(const StompMessage & s)
