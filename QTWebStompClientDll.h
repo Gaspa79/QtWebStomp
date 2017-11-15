@@ -33,6 +33,15 @@ public:
 	explicit QTWebStompClient(const char* url, const char* login, const char* passcode, void(*onConnectedCallback)(void), const char* vHost = NULL, bool debug = false, QObject *parent = Q_NULLPTR);
 	enum ConnectionState { Connecting, Connected, Subscribed, Closed };
 	enum AckMode { Auto, Client, ClientIndividual};
+	
+	/** Description : Subscribes to a queue if you have permission to
+	* Returns : Nothing
+	* Parameters :
+	queueName: The name of the queue (example: /queue/MyQueue/)
+	onMessageCallback: The function that will execute when a message is received. It should have a signature of void (const StompMessage &stompMessage).
+	ackMode: How you want to ack the messages. If set to auto, the messages will be popped instantly from the queue. Other modes require you to ack messages manually.
+	* @author : dmaurino
+	*/
 	void Subscribe(const char* queueName, void(*onMessageCallback)(const StompMessage &s), AckMode ackMode = Auto);
 	void Ack(const StompMessage &s);
 	void Ack(const char* id);
