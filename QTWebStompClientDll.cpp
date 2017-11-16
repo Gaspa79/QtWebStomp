@@ -127,56 +127,58 @@ void QTWebStompClient::onConnected()
 void QTWebStompClient::onTextMessageReceived(QString message)
 {
 	StompMessage stompMessage(message.toStdString().c_str());
-	switch (m_connectionState) {
 
-	case Connecting:
-		if (m_debug) {
-			qDebug() << "Connection response: " << stompMessage.toString().c_str();
-		}
+	switch (m_connectionState) {
 		
-		if (stompMessage.m_messageType == "CONNECTED")
-		{
+		case Connecting:
 			if (m_debug) {
-				qDebug() << "--------------------" << endl << "Connected to STOMP!" << endl << "--------------------" << endl;
+				qDebug() << "Connection response: " << stompMessage.toString().c_str();
 			}
-			m_connectionState = Connected;
-			if (this->m_onConnectedCallback == NULL)
+		
+			if (stompMessage.m_messageType == "CONNECTED")
 			{
-				qDebug() << "WARNING: No callback selected for connection";
-				throw runtime_error("No onConnect callback set!");
+				if (m_debug) {
+					qDebug() << "--------------------" << endl << "Connected to STOMP!" << endl << "--------------------" << endl;
+				}
+				m_connectionState = Connected;
+				if (this->m_onConnectedCallback == NULL)
+				{
+					qDebug() << "WARNING: No callback selected for connection";
+					throw runtime_error("No onConnect callback set!");
+				}
+				else
+				{
+					this->m_onConnectedCallback();
+				}
 			}
 			else
 			{
-				this->m_onConnectedCallback();
+				if (m_debug)
+				{
+					qDebug() << "Message type CONNECTED expected, got " << stompMessage.m_messageType.c_str();
+				}
+
+				throw runtime_error("Message type CONNECTED expected, got" + stompMessage.toString());
 			}
-		}
-		else
-		{
-			if (m_debug)
-			{
-				qDebug() << "Message type CONNECTED expected, got " << stompMessage.m_messageType.c_str();
+			break;
+
+		case Subscribed:
+			// TODO: Improve check, maybe different messages are allowed when subscribed
+			if (stompMessage.m_messageType == "MESSAGE") {
+				if (m_debug) {
+					qDebug() << "Message received from queue!" << endl << stompMessage.toString().c_str();
+				}
+
+				m_onMessageCallback(stompMessage);
 			}
-
-			throw runtime_error("Message type CONNECTED expected, got" + stompMessage.toString());
-		}
-		break;
-
-	case Subscribed:
-		// TODO: Improve check, maybe different messages are allowed when subscribed
-		if (stompMessage.m_messageType == "MESSAGE") {
-			if (m_debug) {
-				qDebug() << "Message received from queue!" << endl << stompMessage.toString().c_str();
+			else {
+				throw runtime_error("Message type MESSAGE expected, got" + stompMessage.m_messageType + ". Message is : " +stompMessage.toString());
 			}
+			break;
 
-			m_onMessageCallback(stompMessage);
-		}
-		else {
-			throw runtime_error("Message type MESSAGE expected, got" + stompMessage.m_messageType + ". Message is : " +stompMessage.toString());
-		}
-		break;
-
-	default:
-		break;
+		default:
+			throw runtime_error("Unsupported connection state");
+			break;
 	}
 
 }
