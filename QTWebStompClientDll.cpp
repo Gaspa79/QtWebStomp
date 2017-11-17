@@ -91,8 +91,12 @@ QTWebStompClient::QTWebStompClient(const char* url, const char* login, const cha
 	}
 	m_vHost = vHost;
 
-
 	connect(&m_webSocket, &QWebSocket::connected, this, &QTWebStompClient::onConnected);
+	
+	
+	connect(&m_webSocket, (&QWebSocket::sslErrors),
+		this, &QTWebStompClient::onSslErrors);
+
 	connect(&m_webSocket, &QWebSocket::disconnected, this, &QTWebStompClient::closed);
 	m_webSocket.open(QUrl(url));
 }
@@ -215,6 +219,11 @@ void QTWebStompClient::Subscribe(const char* queueName, void(*onMessageCallback)
 	m_webSocket.sendTextMessage(subscribeFrame);
 	m_connectionState = Subscribed;
 	m_onMessageCallback = onMessageCallback;
+}
+
+void QTWebStompClient::onSslErrors(const QList<QSslError> &errors)
+{
+	throw runtime_error("SSL error! I'd show the error description if there were an easy way to convert from enum to string in c++. You'll have to debug.");
 }
 
 void QTWebStompClient::closed()

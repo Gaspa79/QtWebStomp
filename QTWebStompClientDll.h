@@ -13,6 +13,8 @@
 #include "StompMessage.h"
 #include <QtCore/QObject>
 #include <QtWebSockets/QWebSocket>
+#include <QtNetwork/qssl.h>
+#include <QtCore/QList>
 
 class QTWEBSTOMPCLIENTDLL_EXPORT QTWebStompClient : public QObject
 {
@@ -76,6 +78,8 @@ Q_SIGNALS:
 	private Q_SLOTS:
 	void onConnected();
 	void onTextMessageReceived(QString message);
+	void onSslErrors(const QList<QSslError> &errors);
+
 
 private:
 	QWebSocket m_webSocket;
