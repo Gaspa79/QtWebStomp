@@ -192,6 +192,7 @@ void QTWebStompClient::Subscribe(const char* queueName, void(*onMessageCallback)
 {
 	if (m_connectionState != Connected)
 	{
+		// For now, if you need to subscribe to 2 queues, you can create two instances of the client. Later an improvement would be to use the id variables of the underlying websocket lib.
 		throw runtime_error("Cannot subscribe when connection hasn't finished or when already subscribed. Try using the callback function for onConnect to subscribe");
 	}
 	map<string, string> headers;

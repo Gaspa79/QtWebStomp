@@ -13,8 +13,7 @@
 #include "StompMessage.h"
 #include <QtCore/QObject>
 #include <QtWebSockets/QWebSocket>
-#include <QtNetwork/qssl.h>
-#include <QtCore/QList>
+#include <QtNetwork/QSslError>
 
 class QTWEBSTOMPCLIENTDLL_EXPORT QTWebStompClient : public QObject
 {
@@ -24,7 +23,8 @@ public:
 	/** Description : Constructor for the WebStompClient
 	* Returns : Nothing
 	* Parameters :
-	- url: The url of the webstomp server (example: ws://localhost/ws). The ws:// to indicate the protocol is required
+	- url: The url of the webstomp server (example: ws://localhost/ws). The ws:// to indicate the protocol is required. If you want to use ssl, then use wss:// .
+		   By default, the port is 80 but you can connect to any port using a url with a specific port.
 	- login: Self-explanatory. The username you wanna use to log in
 	- passcode: The password of the user. Why I didn't name it "password"? Well because in STOMP it's called passCODE.
 	- vHost: The vHost you want to connect to. If you don't specify one, the server will try and connect you to the default one if you have access.
